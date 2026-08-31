@@ -1,22 +1,15 @@
-"""
-CVE-2023-30861 触发代码
-Flask < 2.3.2 在设置 session cookie 时未正确限制 path，
-导致同域其他路径下的恶意页面可窃取 session cookie。
-此文件中显式调用 session.permanent = True 以触发可达性分析。
-"""
-from flask import Flask, session
-
-app = Flask(__name__)
-app.secret_key = "eval-fixture-secret-key"
+"""纯标准库应用：不 import 任何第三方依赖"""
+import json
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
-@app.route("/login")
-def login():
-    # 这一行是 analyze_reachability 需要匹配的关键证据
-    session.permanent = True
-    session["user"] = "eval_user"
-    return "logged in"
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        body = json.dumps({"status": "ok"}).encode()
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(body)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    HTTPServer(("127.0.0.1", 8000), Handler).serve_forever()
