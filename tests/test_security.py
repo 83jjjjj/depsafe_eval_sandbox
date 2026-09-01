@@ -1,6 +1,6 @@
 """版本级回归测试：安装的 flask 必须 >= 3.1.3（CVE-2026-27205 修复版本）。
 
-- flask==2.2.5（漏洞版本）上此测试 FAIL
+- flask==2.3.2（漏洞版本）上此测试 FAIL
 - flask>=3.1.3（修复版本）上此测试 PASS
 """
 import unittest
