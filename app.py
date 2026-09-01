@@ -1,8 +1,9 @@
-from fastapi import FastAPI
-
-app = FastAPI()
+from pydantic import BaseModel
 
 
-@app.get("/")
-def root():
-    return {"ok": True}
+class Signup(BaseModel):
+    email: str
+
+
+def validate(data: dict):
+    return Signup(**data)
