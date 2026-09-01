@@ -1,8 +1,6 @@
-from google.protobuf.timestamp_pb2 import Timestamp
+import yaml
 
 
-def now_ts(seconds: int):
-    # CVE-2025-4565 / CVE-2026-0994 触发点：protobuf 反序列化
-    ts = Timestamp()
-    ts.seconds = seconds
-    return ts.SerializeToString()
+def parse_config(raw: str):
+    # CVE-2020-14343 触发点：不带 Loader 的不安全加载
+    return yaml.load(raw)

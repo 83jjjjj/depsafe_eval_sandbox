@@ -1,1 +1,1 @@
-protobuf==4.24.4
+pyyaml==5.3.1
