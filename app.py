@@ -1,6 +1,11 @@
-import yaml
+from starlette.applications import Starlette
+from starlette.responses import JSONResponse
+from starlette.routing import Route
 
 
-def parse_config(raw: str):
-    # CVE-2020-14343 触发点：不带 Loader 的不安全加载
-    return yaml.load(raw)
+async def homepage(request):
+    # CVE 系列触发点：starlette 处理请求
+    return JSONResponse({"ok": True})
+
+
+app = Starlette(routes=[Route("/", homepage)])
