@@ -1,11 +1,15 @@
-from flask import Flask, session
+"""纯标准库应用：不 import 任何第三方依赖"""
+import json
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
-app = Flask(__name__)
-app.secret_key = "eval-fixture-secret-key"
+
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        body = json.dumps({"status": "ok"}).encode()
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(body)
 
 
-@app.route("/login")
-def login():
-    # 可达性触发证据：session.permanent = True
-    session.permanent = True
-    return "logged in"
+if __name__ == "__main__":
+    HTTPServer(("127.0.0.1", 8000), Handler).serve_forever()
