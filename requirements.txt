@@ -1,1 +1,2 @@
-starlette==0.26.1
+flask==2.2.5
+itsdangerous==2.1.0
