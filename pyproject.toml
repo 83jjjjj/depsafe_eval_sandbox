@@ -8,5 +8,5 @@ version = "0.1.0"
 description = "DepSafe 评估样本"
 requires-python = ">=3.10"
 dependencies = [
-    "pydantic==1.10.2",
+    "pydantic==1.10.13",
 ]
