@@ -1,6 +1,6 @@
-import requests
+import flask
 
 
-def fetch(url: str, proxies=None):
-    # CVE-2023-32681 触发点：带代理的请求可能泄漏 Proxy-Authorization 头
-    return requests.get(url, proxies=proxies)
+def health() -> str:
+    # 项目 import 了 flask，但从不触碰 session / 请求处理（漏洞触发不可达）
+    return flask.__version__
