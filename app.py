@@ -1,6 +1,15 @@
-import flask
+"""纯标准库应用：不 import 任何第三方依赖"""
+import json
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
-def health() -> str:
-    # 项目 import 了 flask，但从不触碰 session / 请求处理（漏洞触发不可达）
-    return flask.__version__
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        body = json.dumps({"status": "ok"}).encode()
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(body)
+
+
+if __name__ == "__main__":
+    HTTPServer(("127.0.0.1", 8000), Handler).serve_forever()
