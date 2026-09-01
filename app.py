@@ -1,6 +1,6 @@
-from wheel.cli import unpack
+import requests
 
 
-def install_from_wheel(path: str):
-    # CVE-2022-40898 触发点：wheel CLI 解包攻击者可控输入
-    unpack(path, dest="dist")
+def fetch(url: str, proxies=None):
+    # CVE-2023-32681 触发点：带代理的请求可能泄漏 Proxy-Authorization 头
+    return requests.get(url, proxies=proxies)
