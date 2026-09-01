@@ -1,12 +1,14 @@
-import h11
-from pydantic import BaseModel
+from flask import Flask, session
+import yaml
+
+app = Flask(__name__)
+app.secret_key = "eval-fixture-secret-key"
 
 
-class Signup(BaseModel):
-    email: str
-
-
-def handle(raw: dict):
-    conn = h11.Connection(our_role=h11.CLIENT)
-    conn.send(h11.Request(method=b"GET", target=b"/", headers=[]))
-    return Signup(**raw)
+@app.route("/login")
+def login():
+    # flask 触发证据：session.permanent = True
+    session.permanent = True
+    # pyyaml 触发证据：yaml.load 不安全加载
+    yaml.load("key: value")
+    return "logged in"
