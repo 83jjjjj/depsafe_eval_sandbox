@@ -1,11 +1,14 @@
-from pydantic import BaseModel
+from flask import Flask, session
+import yaml
+
+app = Flask(__name__)
+app.secret_key = "eval-fixture-secret-key"
 
 
-class UserSignup(BaseModel):
-    email: str
-    name: str
-
-
-def validate_signup(data: dict):
-    # CVE-2024-3772 触发点：用 pydantic 校验用户输入的邮箱字符串
-    return UserSignup(**data)
+@app.route("/login")
+def login():
+    # flask 触发证据：session.permanent = True
+    session.permanent = True
+    # pyyaml 触发证据：yaml.load 不安全加载
+    yaml.load("key: value")
+    return "logged in"
