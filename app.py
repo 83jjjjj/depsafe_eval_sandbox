@@ -1,6 +1,8 @@
-import flask
+from google.protobuf.timestamp_pb2 import Timestamp
 
 
-def health() -> str:
-    # 项目 import 了 flask，但从不触碰 session / 请求处理（漏洞触发不可达）
-    return flask.__version__
+def now_ts(seconds: int):
+    # CVE-2025-4565 / CVE-2026-0994 触发点：protobuf 反序列化
+    ts = Timestamp()
+    ts.seconds = seconds
+    return ts.SerializeToString()
