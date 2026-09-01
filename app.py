@@ -1,9 +1,14 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Form
 
 app = FastAPI()
 
 
 @app.get("/")
 def root():
-    # CVE-2024-24762 触发点：FastAPI 处理用户输入的多部分表单
     return {"ok": True}
+
+
+@app.post("/submit")
+def submit(name: str = Form(...)):
+    # CVE-2024-24762 触发点：multipart 表单解析（大量 part 触发 ReDoS 的正则路径）
+    return {"name": name}

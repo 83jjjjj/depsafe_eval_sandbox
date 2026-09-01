@@ -9,4 +9,5 @@ description = "DepSafe 评估样本"
 requires-python = ">=3.10"
 dependencies = [
     "fastapi==0.95.0",
+    "python-multipart==0.0.31",
 ]
