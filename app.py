@@ -1,14 +1,6 @@
-from flask import Flask, session
-import yaml
-
-app = Flask(__name__)
-app.secret_key = "eval-fixture-secret-key"
+import flask
 
 
-@app.route("/login")
-def login():
-    # flask 触发证据：session.permanent = True
-    session.permanent = True
-    # pyyaml 触发证据：yaml.load 不安全加载
-    yaml.load("key: value")
-    return "logged in"
+def health() -> str:
+    # 项目 import 了 flask，但从不触碰 session / 请求处理（漏洞触发不可达）
+    return flask.__version__
