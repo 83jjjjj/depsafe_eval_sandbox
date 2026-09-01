@@ -1,14 +1,15 @@
-from fastapi import FastAPI, Form
+from flask import Flask, session
 
-app = FastAPI()
-
-
-@app.get("/")
-def root():
-    return {"ok": True}
+app = Flask(__name__)
+app.secret_key = "eval-fixture-secret-key"
 
 
-@app.post("/submit")
-def submit(name: str = Form(...)):
-    # CVE-2024-24762 触发点：multipart 表单解析（大量 part 触发 ReDoS 的正则路径）
-    return {"name": name}
+@app.before_first_request
+def init_state():
+    # flask 3.0 移除了 before_first_request → 跨大版本修复后此代码必然崩溃
+    session.permanent = True
+
+
+@app.route("/login")
+def login():
+    return "logged in"
