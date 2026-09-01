@@ -1,14 +1,14 @@
-from flask import Flask, session
-import yaml
+from fastapi import FastAPI, Form
 
-app = Flask(__name__)
-app.secret_key = "eval-fixture-secret-key"
+app = FastAPI()
 
 
-@app.route("/login")
-def login():
-    # flask 触发证据：session.permanent = True
-    session.permanent = True
-    # pyyaml 触发证据：yaml.load 不安全加载
-    yaml.load("key: value")
-    return "logged in"
+@app.get("/")
+def root():
+    return {"ok": True}
+
+
+@app.post("/submit")
+def submit(name: str = Form(...)):
+    # CVE-2024-24762 触发点：multipart 表单解析（大量 part 触发 ReDoS 的正则路径）
+    return {"name": name}
