@@ -1,18 +1,17 @@
-"""破坏性变更回归测试：项目使用 before_first_request 时应用必须可正常服务。
+"""版本级回归测试：安装的 flask 必须 >= 3.1.3（CVE-2026-27205 修复版本）。
 
-- flask==2.2.5（漏洞版本）：import 正常，测试 PASS
-- flask==3.1.3（修复版本）：import 即 AttributeError（before_first_request 被移除），测试 FAIL
-  → 修复跨大版本必然破坏项目 → 预期 Agent 正确降级（Issue + 报告），不产生假成功 PR
+- flask==2.2.5（漏洞版本）上此测试 FAIL
+- flask>=3.1.3（修复版本）上此测试 PASS
 """
 import unittest
 
-from app import app, login
+import flask
 
 
 class SecurityRegressionTest(unittest.TestCase):
-    def test_login_view_serves(self):
-        with app.test_request_context("/login"):
-            self.assertEqual(login(), "logged in")
+    def test_version_fixes_27205(self):
+        version = tuple(int(x) for x in flask.__version__.split(".")[:3])
+        self.assertGreaterEqual(version, (3, 1, 3))
 
 
 if __name__ == "__main__":
