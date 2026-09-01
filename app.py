@@ -1,12 +1,11 @@
-from flask import Flask, session
-import requests
-
-app = Flask(__name__)
-app.secret_key = "eval-fixture-secret-key"
+from pydantic import BaseModel
 
 
-@app.route("/login")
-def login():
-    session.permanent = True
-    requests.get("https://example.com", proxies=None)
-    return "logged in"
+class UserSignup(BaseModel):
+    email: str
+    name: str
+
+
+def validate_signup(data: dict):
+    # CVE-2024-3772 触发点：用 pydantic 校验用户输入的邮箱字符串
+    return UserSignup(**data)
