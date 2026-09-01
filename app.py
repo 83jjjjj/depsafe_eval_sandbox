@@ -1,11 +1,6 @@
-from pydantic import BaseModel
+from wheel.cli import unpack
 
 
-class UserSignup(BaseModel):
-    email: str
-    name: str
-
-
-def validate_signup(data: dict):
-    # CVE-2024-3772 触发点：用 pydantic 校验用户输入的邮箱字符串
-    return UserSignup(**data)
+def install_from_wheel(path: str):
+    # CVE-2022-40898 触发点：wheel CLI 解包攻击者可控输入
+    unpack(path, dest="dist")
