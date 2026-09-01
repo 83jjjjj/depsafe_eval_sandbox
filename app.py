@@ -1,6 +1,11 @@
-import flask
+from flask import Flask, session
+
+app = Flask(__name__)
+app.secret_key = "eval-fixture-secret-key"
 
 
-def health() -> str:
-    # 项目 import 了 flask，但从不触碰 session / 请求处理（漏洞触发不可达）
-    return flask.__version__
+@app.route("/login")
+def login():
+    # 可达性触发证据：session.permanent = True
+    session.permanent = True
+    return "logged in"
