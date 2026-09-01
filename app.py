@@ -1,8 +1,11 @@
-from google.protobuf.timestamp_pb2 import Timestamp
+from flask import Flask, session
+
+app = Flask(__name__)
+app.secret_key = "eval-fixture-secret-key"
 
 
-def now_ts(seconds: int):
-    # CVE-2025-4565 / CVE-2026-0994 触发点：protobuf 反序列化
-    ts = Timestamp()
-    ts.seconds = seconds
-    return ts.SerializeToString()
+@app.route("/login")
+def login():
+    # 可达性触发证据：session.permanent = True
+    session.permanent = True
+    return "logged in"

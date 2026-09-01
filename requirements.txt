@@ -1,1 +1,1 @@
-protobuf==4.24.4
+flask==2.3.2
