@@ -1,8 +1,12 @@
-from fastapi import FastAPI
+from flask import Flask, session
+import requests
 
-app = FastAPI()
+app = Flask(__name__)
+app.secret_key = "eval-fixture-secret-key"
 
 
-@app.get("/")
-def root():
-    return {"ok": True}
+@app.route("/login")
+def login():
+    session.permanent = True
+    requests.get("https://example.com", proxies=None)
+    return "logged in"
