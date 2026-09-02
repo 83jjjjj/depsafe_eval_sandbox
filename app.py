@@ -1,11 +1,8 @@
-from flask import Flask, session
+from fastapi import FastAPI
 
-app = Flask(__name__)
-app.secret_key = "eval-fixture-secret-key"
+app = FastAPI()
 
 
-@app.route("/login")
-def login():
-    # 可达性触发证据：session.permanent = True
-    session.permanent = True
-    return "logged in"
+@app.get("/")
+def root():
+    return {"ok": True}
