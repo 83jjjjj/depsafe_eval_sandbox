@@ -1,7 +1,14 @@
-import requests
+from flask import Flask, session
+import yaml
+
+app = Flask(__name__)
+app.secret_key = "eval-fixture-secret-key"
 
 
-def fetch(url: str, method: str = "get"):
-    # 动态调用：属性名来自函数参数，静态分析无法确定实际调用目标
-    func = getattr(requests, method)
-    return func(url)
+@app.route("/login")
+def login():
+    # flask 触发证据：session.permanent = True
+    session.permanent = True
+    # pyyaml 触发证据：yaml.load 不安全加载
+    yaml.load("key: value")
+    return "logged in"
