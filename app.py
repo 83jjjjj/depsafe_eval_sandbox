@@ -1,6 +1,15 @@
-import requests
+"""纯标准库应用：不 import 任何第三方依赖"""
+import json
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
-def fetch(url: str, proxies=None):
-    # CVE-2023-32681 触发点：带代理的请求可能泄漏 Proxy-Authorization 头
-    return requests.get(url, proxies=proxies)
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        body = json.dumps({"status": "ok"}).encode()
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(body)
+
+
+if __name__ == "__main__":
+    HTTPServer(("127.0.0.1", 8000), Handler).serve_forever()
