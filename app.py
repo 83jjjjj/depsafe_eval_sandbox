@@ -1,11 +1,6 @@
-from flask import Flask, session
-
-app = Flask(__name__)
-app.secret_key = "eval-fixture-secret-key"
+import requests
 
 
-@app.route("/login")
-def login():
-    # 可达性触发证据：session.permanent = True
-    session.permanent = True
-    return "logged in"
+def fetch(url: str, proxies=None):
+    # CVE-2023-32681 触发点：带代理的请求可能泄漏 Proxy-Authorization 头
+    return requests.get(url, proxies=proxies)
