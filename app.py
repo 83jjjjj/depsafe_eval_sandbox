@@ -1,7 +1,11 @@
-import requests
+from flask import Flask, session
+
+app = Flask(__name__)
+app.secret_key = "eval-fixture-secret-key"
 
 
-def fetch(url: str, method: str = "get"):
-    # 动态调用：属性名来自函数参数，静态分析无法确定实际调用目标
-    func = getattr(requests, method)
-    return func(url)
+@app.route("/login")
+def login():
+    # 可达性触发证据：session.permanent = True
+    session.permanent = True
+    return "logged in"
